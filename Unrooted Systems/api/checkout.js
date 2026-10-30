@@ -1,7 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
-  // CORS headers ne badha domains mate allow kariye chhe
   res.setHeader('Access-Control-Allow-Credentials', true);
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -23,7 +22,7 @@ export default async function handler(req, res) {
         payment_method_types: ['card'],
         line_items: [
           {
-            price: priceId,
+            price: priceId || 'price_1UVSjbK3k0x1gW0jLwA4bYlE',
             quantity: 1,
           },
         ],
