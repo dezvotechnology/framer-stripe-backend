@@ -12,19 +12,19 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      const { priceId } = req.body;
+      const { priceId } = req.body; // Frontend thi je priceId aavse te
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [
           {
-            price: priceId,
+            price: priceId, // Aa direct frontend mathi aavele priceId use karse
             quantity: 1,
           },
         ],
-        mode: 'subscription',
-        success_url: `${req.headers.origin || 'https://tamari-website.com'}/success`,
-        cancel_url: `${req.headers.origin || 'https://tamari-website.com'}/cancel`,
+        mode: 'payment',
+        success_url: `${req.headers.origin || 'https://tamari-site.com'}/success?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.origin || 'https://tamari-site.com'}/cancel`,
       });
 
       res.status(200).json({ url: session.url });
