@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     try {
       const { totalPrice, product, orderId } = req.body;
 
-      // Ensure amount is valid number, fallback to minimum £10 if 0
+      // Ensure amount is valid number
       const finalAmount = totalPrice && Number(totalPrice) > 0 ? Number(totalPrice) : 1000;
 
       const session = await stripe.checkout.sessions.create({
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
               product_data: {
                 name: product ? `Custom ${product}` : 'Custom Product Configuration',
               },
-              unit_amount: Math.round(finalAmount * 100), // Dynamic price in pence/cents
+              unit_amount: Math.round(finalAmount * 100), // Dynamic amount calculation
             },
             quantity: 1,
           },
