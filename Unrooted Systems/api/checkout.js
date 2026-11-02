@@ -18,8 +18,8 @@ export default async function handler(req, res) {
     try {
       const { totalPrice, product, orderId } = req.body;
 
-      // Ensure amount is valid number
-      const finalAmount = totalPrice && Number(totalPrice) > 0 ? Number(totalPrice) : 1000;
+      // Ensure amount is valid number from Framer
+      const finalAmount = totalPrice && Number(totalPrice) > 0 ? Number(totalPrice) : 10;
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -30,7 +30,7 @@ export default async function handler(req, res) {
               product_data: {
                 name: product ? `Custom ${product}` : 'Custom Product Configuration',
               },
-              unit_amount: Math.round(finalAmount * 100), // Dynamic amount calculation
+              unit_amount: Math.round(finalAmount * 100), // Dynamically calculated from Framer
             },
             quantity: 1,
           },
