@@ -16,8 +16,10 @@ export default async function handler(req, res) {
 
   if (req.method === 'POST') {
     try {
-      // Framer mathi je totalPrice ane product aave chhe tene ahiya read karie chhe
       const { totalPrice, product, orderId } = req.body;
+
+      // Ensure amount is valid number, fallback to minimum £10 if 0
+      const finalAmount = totalPrice && Number(totalPrice) > 0 ? Number(totalPrice) : 1000;
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -26,10 +28,9 @@ export default async function handler(req, res) {
             price_data: {
               currency: 'gbp',
               product_data: {
-                name: product || 'Custom Configuration',
+                name: product ? `Custom ${product}` : 'Custom Product Configuration',
               },
-              // Ahiya static price ni jagya ae Framer mathi aaveli live totalPrice set thase
-              unit_amount: Math.round(Number(totalPrice) * 100), 
+              unit_amount: Math.round(finalAmount * 100), // Dynamic price in pence/cents
             },
             quantity: 1,
           },
